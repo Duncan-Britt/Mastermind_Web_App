@@ -1,1 +1,9 @@
 <h1><%= session[:turn] %></h1>
+<h1><%= session[:code] %></h1>
+<form id="code-break" action="/play/code_breaker" method="post" data-code-size="<%= session[:code_size] %>" data-min="<%= session[:digit_range].min %>" data-max="<%= session[:digit_range].max %>">
+  <label for="guess">
+    Enter <%= session[:code_size] %> digits, <%= session[:digit_range].min %> through <%= session[:digit_range].max %>
+  </label>
+  <input id="guess" type="text" name="guess" />
+  <button type="submit">Guess</button>
+</form>
