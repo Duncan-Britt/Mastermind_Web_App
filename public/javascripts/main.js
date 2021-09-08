@@ -9,18 +9,18 @@ function convertGuess(guess) {
 };
 
 // digits must either be passed in or be defined in scope
-function validateRange(digits) {
-  if (digits.length != CODESIZE) {
+function validateInput(string) {
+  if (string.length != CODESIZE) {
     return false
-  };
+  }
 
   validity = true
-  digits.forEach((item, i) => {
-    if (item < MIN || item > MAX) {
+  let digits = convertGuess(string)
+  digits.forEach((n, i) => {
+    if (n < MIN || n > MAX || Number.isNaN(n)) {
       validity = false
-    };
-  });
-
+    }
+  })
   return validity
 }
 
@@ -30,14 +30,13 @@ $(function() {
     event.stopPropagation();
 
     let data = $('form#code-break').serialize()
-    let input = data.match(/\d+/)[0]
-    let digits = convertGuess(input)
+    let input = data.split('=')[1]
 
-    if (validateRange(digits)) {
-      console.log("ran")
-
+    if (validateInput(input)) {
+      $("#invalid").css("visibility", "hidden")
+      
+      let digits = convertGuess(input)
       form = $(this)
-      console.log(form)
 
       var request = $.ajax({
         url: form.attr("action"),
@@ -46,14 +45,23 @@ $(function() {
       })
 
       request.done(function(data, textStatus, jqXHR) {
-        if (jqXHR.status === 204) {
+        let guessStatus = data.slice(0, 1)
+        data = data.slice(1, 8)
 
+        // if (jqXHR.status === 204) {
+        if (guessStatus == '1' || guessStatus == '2') {
+          window.location.href = "/play/code_breaker";
         } else if (jqXHR.status === 200) {
+          $("#clues").append(
+            `<li>${input}: ${data}</li>`
+          )
 
+          // $("#input").val(""); TRYING TO CLEAR INPUT FIELD
         }
       })
     } else {
       console.log("Invalid input") // PUT FLASH MESSAGE HERE
+      $("#invalid").css("visibility", "visible")
     }
   })
 });

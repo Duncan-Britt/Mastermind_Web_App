@@ -39,6 +39,8 @@ def new_client_setup
     code_size: session[:code_size],
     digit_range: session[:digit_range]
   )
+  session[:guesses] ||= {}
+  session[:solved] ||= false
 end
 
 get '/play/code_breaker' do
@@ -47,15 +49,63 @@ get '/play/code_breaker' do
   erb :code_breaker, layout: :layout
 end
 
-post '/play/code_breaker' do
-  session[:turn] += 1
+def response_clues(guess)
+  unguessed_code = []
+  non_exact_guesses = []
+  clues = []
 
-  guess = params[:guess].chars.map { |n| Integer(n) } # [int, int, int, int]
-  p guess
-
-  if env["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest"
-    status 204
-  else
-    redirect '/play/code_breaker'
+  session[:code].each_with_index do |n, i|
+    if n == guess[i]
+      clues << 'x'
+    else
+      unguessed_code << n
+      non_exact_guesses << guess[i]
+    end
   end
+
+  session[:digit_range].each do |n|
+    [unguessed_code.count(n), non_exact_guesses.count(n)].min.times do
+      clues << 'o'
+    end
+  end
+
+  clues.join(" ")
+end
+
+post '/play/code_breaker' do
+  guess = params[:guess].chars.map { |n| Integer(n) } # [int, int, int, int]
+
+  # if env["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest"
+  #   status 200
+  # else
+  #   redirect '/play/code_breaker'
+  # end
+  clue = response_clues(guess)
+  session[:guesses][session[:turn]] = [params[:guess], clue]
+  session[:turn] += 1
+  if guess == session[:code]
+    session[:solved] = true
+    "1#{clue}"
+  elsif session[:turn] == 13
+    "2#{clue}"
+  else
+    "0#{clue}"
+  end
+end
+
+def new_game_reset
+  session[:code_size] = 4
+  session[:digit_range] = (1..6)
+  session[:turn] = 1
+  session[:code] = random_code(
+    code_size: session[:code_size],
+    digit_range: session[:digit_range]
+  )
+  session[:guesses] = {}
+  session[:solved] = false
+end
+
+get '/play_again' do
+  new_game_reset
+  redirect '/play/code_breaker'
 end

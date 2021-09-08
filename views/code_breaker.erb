@@ -1,9 +1,30 @@
 <h1><%= session[:turn] %></h1>
 <h1><%= session[:code] %></h1>
-<form id="code-break" action="/play/code_breaker" method="post" data-code-size="<%= session[:code_size] %>" data-min="<%= session[:digit_range].min %>" data-max="<%= session[:digit_range].max %>">
-  <label for="guess">
-    Enter <%= session[:code_size] %> digits, <%= session[:digit_range].min %> through <%= session[:digit_range].max %>
-  </label>
-  <input id="guess" type="text" name="guess" />
-  <button type="submit">Guess</button>
-</form>
+<p id="invalid">Invalid input</p>
+<% if session[:solved] %>
+  <p>You guessed it!</p>
+  <p><a href="/play_again">Play again</a></p>
+<% elsif session[:turn] == 13 %>
+  <p>Better luck next time. The answer was <%= session[:code].join(' ') %></p>
+  <p><a href="/play_again">Play again</a></p>
+<% end %>
+<% unless session[:solved] || session[:turn] == 13 %>
+  <form id="code-break" action="/play/code_breaker" method="post" data-code-size="<%= session[:code_size] %>" data-min="<%= session[:digit_range].min %>" data-max="<%= session[:digit_range].max %>">
+    <label for="guess">
+      Enter <%= session[:code_size] %> digits, <%= session[:digit_range].min %> through <%= session[:digit_range].max %>
+    </label>
+    <input id="guess" type="text" name="guess" />
+    <button type="submit">Guess</button>
+  </form>
+<% end %>
+<ol id="clues">
+  <% session[:guesses].each do |_, guess| %>
+    <li><%= guess[0] %>: <%= guess[1] %></li>
+  <% end %>
+</ol>
+
+<% content_for :head do %>
+  <% unless session[:solved] || session[:turn] == 13 %>
+    <script defer src="/javascripts/main.js" type="text/javascript"></script>
+  <% end %>
+<% end %>
