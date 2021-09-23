@@ -16,6 +16,13 @@
 <% end %>
 
 <% if session[:start_guess] %>
+  <ul>
+  <% session[:previous_ai_guesses].each_with_index do |guess, i| %>
+    <% break if i == session[:previous_ai_guesses].size - 1 %>
+    <li><%= guess.join %>, <%= session[:previous_clues_for_ai][i] %></li>
+  <% end %>
+  </ul>
+
   <form class="ai-guess" action="/play/code_maker" method="post">
     <label for="clues"><%= @new_guess %></label>
     <input id="clues" type="text" name="clues" />

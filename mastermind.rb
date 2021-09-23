@@ -121,6 +121,9 @@ end
 
 post '/play/code_maker' do
   session[:turn] += 1
+  session[:previous_clues_for_ai] << params[:clues]
+  session[:previous_ai_guesses] << random_code
+  redirect '/play/code_maker'
 end
 
 post '/secret_code_ready' do
