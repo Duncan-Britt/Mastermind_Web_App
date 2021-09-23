@@ -102,10 +102,29 @@ def new_game_reset
     digit_range: session[:digit_range]
   )
   session[:guesses] = {}
+  session[:previous_ai_guesses] = [random_code]
+  session[:previous_clues_for_ai] = []
   session[:solved] = false
 end
 
 get '/play_again' do
   new_game_reset
   redirect '/play/code_breaker'
+end
+
+get '/play/code_maker' do
+  if session[:previous_ai_guesses]
+    @new_guess = session[:previous_ai_guesses].last.join
+  end
+  erb :code_maker, layout: :layout
+end
+
+post '/play/code_maker' do
+  session[:turn] += 1
+end
+
+post '/secret_code_ready' do
+  new_game_reset
+  session[:start_guess] = true
+  redirect '/play/code_maker'
 end

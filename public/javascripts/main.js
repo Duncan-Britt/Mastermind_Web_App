@@ -34,7 +34,7 @@ $(function() {
 
     if (validateInput(input)) {
       $("#invalid").css("visibility", "hidden")
-      
+
       let digits = convertGuess(input)
       form = $(this)
 
@@ -60,8 +60,7 @@ $(function() {
         }
       })
     } else {
-      console.log("Invalid input") // PUT FLASH MESSAGE HERE
-      $("#invalid").css("visibility", "visible")
+      $("#invalid").css("visibility", "visible") // FLASH MESSAGE
     }
   })
 });
