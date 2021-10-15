@@ -11,10 +11,10 @@ function convertGuess(guess) {
 // digits must either be passed in or be defined in scope
 function validateInput(string) {
   if (string.length != CODESIZE) {
-    return false
+    return false;
   }
 
-  validity = true
+  let validity = true;
   let digits = convertGuess(string)
   digits.forEach((n, i) => {
     if (n < MIN || n > MAX || Number.isNaN(n)) {

@@ -1,3 +1,9 @@
+<nav>
+  <ul>
+    <li><a id="test" href="/">Home</a></li>
+  </ul>
+</nav>
+
 <p id="invalid">Invalid input</p>
 <% if session[:solved] %>
   <p>You guessed it!</p>
@@ -5,6 +11,8 @@
 <% elsif session[:turn] == 13 %>
   <p>Better luck next time. The answer was <%= session[:code].join(' ') %></p>
   <p><a href="/play_again">Play again</a></p>
+<% else %>
+  <p><a href="/play_again">Restart Game</a></p>
 <% end %>
 <% unless session[:solved] || session[:turn] == 13 %>
   <form id="code-break" action="/play/code_breaker" method="post" data-code-size="<%= session[:code_size] %>" data-min="<%= session[:digit_range].min %>" data-max="<%= session[:digit_range].max %>">

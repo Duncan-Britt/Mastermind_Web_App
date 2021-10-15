@@ -1,0 +1,25 @@
+#clues {
+  list-style-type: decimal;
+  list-style-position: inside;
+}
+
+#invalid {
+  visibility: hidden;
+}
+
+h1 {
+  font-size: 30px;
+}
+
+nav {
+  font-size: 20px;
+}
+
+p {
+  margin: 10px 10px;
+}
+
+li {
+  margin: 10px 10px;
+  padding-left: 10px;
+}

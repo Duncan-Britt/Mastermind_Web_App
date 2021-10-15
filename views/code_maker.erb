@@ -1,9 +1,15 @@
+<nav>
+  <ul>
+    <li><a href="/">Home</a></li>
+  </ul>
+</nav>
+
 <p>First, come up with a secret 4 digit code. <strong>Each digit must be among numbers 1 through 6.</strong> You may want to write it down so you don't forget.</p>
 
 <p>The A.I. will deliver a guess. You have to provide the A.I. with clues before it will make its next guess.</p>
 <ul>
   <li>For every digit in the A.I.'s guess that is both the correct number and in the correct place, include an 'X' in your response.</li>
-  <li>For the remaining numbers in the A.I.'s guess which are correct but in the wrong place, the clue is an 'O'. If your secret code contains fewer of a guessed number than are in the guess, only include as many O's as are in your secret code for the given number. Otherwise, only include as many O's as there instances of the number in the guess.</li>
+  <li>This part is tricky, so read closely: For the remaining numbers in the A.I.'s guess which are correct but in the wrong place, the clue is an 'O'. If your secret code contains fewer of a guessed number than are in the AI's guess, only include as many O's as are in your secret code for the given number. Otherwise, only include as many O's as there instances of the number in the AI's guess.</li>
 </ul>
 <p>For instance, if your secret code is 1234 and the A.I. guesses 1122, your response should be XO. If your secret code is 1222 and the guess is 2332 then your response should still be XO</p>
 
